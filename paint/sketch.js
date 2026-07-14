@@ -10,11 +10,21 @@ let weightInput;
 let btnClear;  //消去ボタン
 let btnSave;
 
-let inputColor;
+let pickedColor;
+let strokes = []; //これまで書いた線を保存
+let currenStroke = []; //今描いてる線を一時保存
+
+let undoData; //キャンバス保存用
+let btnUndo;
+
+let btnSpot;
+let spotMode = false; //スポイトが機能していない状態
+
 
 
 //最初の処理
 function setup() {
+  console.log("setup")
   createCanvas(400, 400);
   background(255)
   pixelDensity(1); //ピクセル深度
@@ -31,6 +41,14 @@ function setup() {
   btnSave = select('#save');
   console.log(btnSave); //ログの表示
 
+  btnUndo = select('#undo'); //undoボタンをhtmlから取得
+  btnUndo.mousePressed(undo); //押したときに実行
+
+  btnSpot = select('#spot');
+  btnSpot.mousePressed(spot);
+
+
+
   btnSave.mousePressed(saveImg);
    //関数があってるのに実行されていない場合は関数名を変更すると良い(p５.jsが既に使っている可能性がある)
    //ID名は被っていなければOK
@@ -39,6 +57,7 @@ function setup() {
 }
 
 function draw() {
+  console.log("draw");
   //background(220);
 
   if ( keyIsPressed ){
@@ -55,20 +74,7 @@ function draw() {
 
   stroke(colorInput.value());
   strokeWeight(sw); //線の太さ
-  
-  //noStroke(); //境界線を消す
-  // stroke(colorInput.value()); //塗りの色
-  // strokeWeight(weightInput.value());
 
-  if ( mouseIsPressed ){
-//条件がtrueだったら実行
-//circle(mouseX,mouseY,10);
-
-//前のフレームの位置から
-//今のフレームの位置まで線を引く
-    line(px,py,mouseX,mouseY, sw * random(0.5,2));
-  }
-  update();
 }
 
 //マウス座標を更新
@@ -87,10 +93,66 @@ function saveImg(){
   saveCanvas('paint.png');
 }
 
-function mouseReleased(){
+function mousePressed(){                    //書く前のキャンバスを保存
+  currenStroke = []; //一時保存用
+  px = mouseX;
+  py = mouseY;
+
+  loadPixels();
+  undoData = pixels.slice(); //配列のコピー
+
+  console.log("保存",undoData.length);
+
+
+if (spotMode){
+  pickedColor = get(mouseX,mouseY);       //色の取得
+  let hexColor = hex(pickedColor);                       //色をカラーコードにする
+
+  console.log(hexColor);
+
+  colorInput.value(hexColor);
+  spotMode = false;
+}
+
+
+
+}
+
+function mouseDragged(){                    //線を書く
+  console.log('mouseDragged');
+  line(px,py,mouseX,mouseY);
+
+  update();
+}
+
+function mouseReleased(){                  //保存していたキャンバスを戻す
   console.log('マウスを離しました');
   let code = encodePixels(); //キャンバスを符号化
+  strokes.push(currenStroke);
   console.log('code');
-
   storeItem('paint',code);
 }
+
+function undo() {
+  console.log("undo!");
+  console.log(undoData);
+  loadPixels();
+  for (let i = 0; i< pixels.length; i++){
+    pixels[i] = undoData[i];
+  }
+  updatePixels();
+}
+
+function spot(){
+  console.log("スポイト");
+  spotMode = true;   //箱の中身を変える＝スポイトをonにする
+}
+
+
+
+
+window.setup = setup;
+window.draw = draw;
+window.mousePressed = mousePressed;
+window.mouseDragged = mouseDragged;
+window.mouseReleased = mouseReleased;
