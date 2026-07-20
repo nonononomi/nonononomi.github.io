@@ -1,0 +1,12 @@
+@charset "utf-8";
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+canvas {
+  display: block;
+  border: 10px solid rgb(234, 234, 234);
+}
+
