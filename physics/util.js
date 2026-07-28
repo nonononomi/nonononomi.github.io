@@ -43,7 +43,7 @@ export function isOutOfBounds(body, x, y, w, h) {
     let vx = v[i].x;
     let vy = v[i].y;
     if (vx < x || vx > (x + w) || vy < y || vy > (y + h)) {
-      return true;
+      return true;    //範囲外であればtrue
     }
     return false;
   }

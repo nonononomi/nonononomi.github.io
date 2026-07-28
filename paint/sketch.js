@@ -20,7 +20,12 @@ let btnUndo;
 let btnSpot;
 let spotMode = false; //スポイトが機能していない状態
 
+<<<<<<< HEAD
+//let swText;
+let lineWidth
+=======
 let penColor; //色の保存
+>>>>>>> 903cf70d0b90d06ee2773970ae19629ca9f163cd
 
 
 
@@ -51,6 +56,10 @@ function setup() {
   btnSpot.mousePressed(spot);
   console.log("スポイト登録完了");
 
+<<<<<<< HEAD
+  //swText = select("#swValue")
+  lineWidth = select("#lineWidth");
+=======
   penColor = color(colorInput.value());
 
   colorInput.input(function () {
@@ -58,10 +67,13 @@ function setup() {
 
   
 });
+>>>>>>> 903cf70d0b90d06ee2773970ae19629ca9f163cd
 
   btnSave.mousePressed(saveImg);
    //関数があってるのに実行されていない場合は関数名を変更すると良い(p５.jsが既に使っている可能性がある)
    //ID名は被っていなければOK
+
+  sw = Number(weightInput.value());
 
 
 }
@@ -70,17 +82,22 @@ function draw() {
   console.log("draw");
   //background(220);
 
-  if ( keyIsPressed ){
-  console.log(key);
-  if (key == 'f') { //Fキーが押されていたら
-    sw +=2;
-  } else if (key == 'd'){ //Dキーが押されていたら線を細くする
-    sw -= 2;
-  }
-  }
+  //if ( keyIsPressed ){
+  //console.log(key);
+  //if (key == 'f') { //Fキーが押されていたら
+  //  weightInput.value(min(100, Number(weightInput.value()) + 0.1));
+  //} else if (key == 'd'){ //Dキーが押されていたら線を細くする
+  //  weightInput.value(max(1, Number(weightInput.value()) - 0.1));
+  //}
+
+  //swText.html(sw);
+  //}
 
 
-  sw = constrain(sw,1,100);
+  //sw = constrain(sw,1,100);
+
+  sw = Number(weightInput.value());
+  lineWidth.html(sw);
 
   //stroke(colorInput.value());
   stroke(penColor);
@@ -154,7 +171,7 @@ function mouseDragged(){                    //線を書く
 }
 
   console.log('mouseDragged');
-  line(px,py,mouseX,mouseY);
+  line(px-10,py-10,mouseX -10,mouseY -10);
 
   update();
 }
