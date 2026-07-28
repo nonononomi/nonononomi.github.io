@@ -20,12 +20,8 @@ let btnUndo;
 let btnSpot;
 let spotMode = false; //スポイトが機能していない状態
 
-<<<<<<< HEAD
 //let swText;
 let lineWidth
-=======
-let penColor; //色の保存
->>>>>>> 903cf70d0b90d06ee2773970ae19629ca9f163cd
 
 
 
@@ -52,22 +48,10 @@ function setup() {
   btnUndo.mousePressed(undo); //押したときに実行
 
   btnSpot = select('#spot');
-  console.log(btnSpot);
   btnSpot.mousePressed(spot);
-  console.log("スポイト登録完了");
 
-<<<<<<< HEAD
   //swText = select("#swValue")
   lineWidth = select("#lineWidth");
-=======
-  penColor = color(colorInput.value());
-
-  colorInput.input(function () {
-  penColor = color(colorInput.value());
-
-  
-});
->>>>>>> 903cf70d0b90d06ee2773970ae19629ca9f163cd
 
   btnSave.mousePressed(saveImg);
    //関数があってるのに実行されていない場合は関数名を変更すると良い(p５.jsが既に使っている可能性がある)
@@ -99,8 +83,7 @@ function draw() {
   sw = Number(weightInput.value());
   lineWidth.html(sw);
 
-  //stroke(colorInput.value());
-  stroke(penColor);
+  stroke(colorInput.value());
   strokeWeight(sw); //線の太さ
 
 }
@@ -122,17 +105,6 @@ function saveImg(){
 }
 
 function mousePressed(){                    //書く前のキャンバスを保存
-
-  console.log("spotMode =", spotMode);
-
-
-
-  if (mouseY > height || mouseX > width || mouseX < 0 || mouseY < 0) {
-  return;
-}
-
-  console.log(mouseX, mouseY);
-
   currenStroke = []; //一時保存用
   px = mouseX;
   py = mouseY;
@@ -143,21 +115,14 @@ function mousePressed(){                    //書く前のキャンバスを保�
   console.log("保存",undoData.length);
 
 
-
-
 if (spotMode){
-  console.log(mouseX, mouseY);
-  pickedColor = get(mouseX,mouseY);
-  console.log(pickedColor);                           //色の取得
+  pickedColor = get(mouseX,mouseY);       //色の取得
+  let hexColor = hex(pickedColor);                       //色をカラーコードにする
 
-  penColor = color(pickedColor);
+  console.log(hexColor);
 
-  //let hexColor = hex(pickedColor);                       //色をカラーコードにする
-  //console.log(hexColor);
-
-  //colorInput.value(hexColor);
+  colorInput.value(hexColor);
   spotMode = false;
-  return;
 }
 
 
@@ -165,11 +130,6 @@ if (spotMode){
 }
 
 function mouseDragged(){                    //線を書く
-
-  if (spotMode) {
-  return;
-}
-
   console.log('mouseDragged');
   line(px-10,py-10,mouseX -10,mouseY -10);
 
@@ -177,14 +137,11 @@ function mouseDragged(){                    //線を書く
 }
 
 function mouseReleased(){                  //保存していたキャンバスを戻す
-
   console.log('マウスを離しました');
   let code = encodePixels(); //キャンバスを符号化
   strokes.push(currenStroke);
   console.log('code');
   storeItem('paint',code);
-
-  
 }
 
 function undo() {
@@ -199,11 +156,7 @@ function undo() {
 
 function spot(){
   console.log("スポイト");
-
   spotMode = true;   //箱の中身を変える＝スポイトをonにする
-  console.log(spotMode);
-
-  return false;
 }
 
 
